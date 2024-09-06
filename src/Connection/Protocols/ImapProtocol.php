@@ -105,10 +105,10 @@ class ImapProtocol extends Protocol {
      */
     public function nextLine(): string {
         $line = "";
-        while (($next_char = fread($this->stream, 1)) !== false && $next_char !== "\n") {
+        while (($next_char = fread($this->stream, 1)) !== false && !in_array($next_char, ["", "\n"])) {
             $line .= $next_char;
         }
-        if ($line === "" && $next_char === false) {
+        if ($line === "" && ($next_char === false || $next_char === "")) {
             throw new RuntimeException('empty response');
         }
         if ($this->debug) echo "<< ".$line."\n";
@@ -135,7 +135,9 @@ class ImapProtocol extends Protocol {
      */
     protected function nextTaggedLine(&$tag): string {
         $line = $this->nextLine();
-        list($tag, $line) = explode(' ', $line, 2);
+        if (str_contains($line, ' ')) {
+            list($tag, $line) = explode(' ', $line, 2);
+        }
 
         return $line;
     }
