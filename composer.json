@@ -18,6 +18,12 @@
             "role": "Developer"
         }
     ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://composer-repo.websight.nl/"
+        }
+    ],
     "require": {
         "php": ">=7.0.0",
         "ext-openssl": "*",
